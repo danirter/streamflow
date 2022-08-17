@@ -7,7 +7,7 @@ import {layout} from './layout';
  * @param {Array<SankeyDataPoint>} data Array of raw data elements
  * @return {Map<string, SankeyNode>}
  */
-export function buildNodesFromRawData(data) {
+ export function buildNodesFromRawData(data) {
   const nodes = new Map();
   for (let i = 0; i < data.length; i++) {
     const {from, to, flow} = data[i];
@@ -160,8 +160,8 @@ export default class SankeyController extends DatasetController {
     const firstOpts = me.resolveDataElementOptions(start, mode);
     const sharedOptions = me.getSharedOptions(mode, elems[start], firstOpts);
     const dataset = me.getDataset();
-    const borderWidth = valueOrDefault(dataset.borderWidth, 1) / 2 + 0.5;
-    const nodeWidth = valueOrDefault(dataset.nodeWidth, 10);
+    const borderWidth = 0;
+    const nodeWidth = valueOrDefault(dataset.nodeWidth, 20);
 
     for (let i = start; i < start + count; i++) {
       /* getParsed(idx: number) => SankeyParsedData */
@@ -195,7 +195,7 @@ export default class SankeyController extends DatasetController {
     const dataset = me.getDataset(); /* SankeyControllerDatasetOptions */
     const size = validateSizeValue(dataset.size);
     const borderWidth = valueOrDefault(dataset.borderWidth, 1);
-    const nodeWidth = valueOrDefault(dataset.nodeWidth, 10);
+    const nodeWidth = valueOrDefault(dataset.nodeWidth, 20);
     const labels = dataset.labels;
     const {xScale, yScale} = me._cachedMeta;
 
@@ -209,15 +209,11 @@ export default class SankeyController extends DatasetController {
       const height = Math.abs(yScale.getPixelForValue(node.y + max) - y);
       const label = labels && labels[node.key] || node.key;
       let textX = x;
-      ctx.fillStyle = dataset.color || 'black';
+      ctx.fillStyle = node.color || 'black';
       ctx.textBaseline = 'middle';
-      if (x < chartArea.width / 2) {
-        ctx.textAlign = 'left';
-        textX += nodeWidth + borderWidth + 4;
-      } else {
-        ctx.textAlign = 'right';
-        textX -= borderWidth + 4;
-      }
+      ctx.textAlign = 'left';
+      
+      textX += nodeWidth + borderWidth + 4;
       this._drawLabel(label, y, height, ctx, textX);
     }
     ctx.restore();
@@ -233,22 +229,22 @@ export default class SankeyController extends DatasetController {
    */
   _drawLabel(label, y, height, ctx, textX) {
     const me = this;
-    const font = toFont(me.options.font, me.chart.options.font);
+    const font = {...toFont(me.options.font, me.chart.options.font), size: 10};
     const lines = isNullOrUndef(label) ? [] : toTextLines(label);
     const linesLength = lines.length;
-    const middle = y + height / 2;
+    const middle = y + 0;
     const textHeight = font.lineHeight;
     const padding = valueOrDefault(me.options.padding, textHeight / 2);
 
     ctx.font = font.string;
 
     if (linesLength > 1) {
-      const top = middle - (textHeight * linesLength / 2) + padding;
+      const top = y + textHeight + padding;
       for (let i = 0; i < linesLength; i++) {
         ctx.fillText(lines[i], textX, top + (i * textHeight));
       }
     } else {
-      ctx.fillText(label, textX, middle);
+      ctx.fillText(label, textX, y + textHeight);
     }
   }
 
@@ -259,24 +255,20 @@ export default class SankeyController extends DatasetController {
     const dataset = me.getDataset();  /* SankeyControllerDatasetOptions */
     const size = validateSizeValue(dataset.size);
     const {xScale, yScale} = me._cachedMeta;
-    const borderWidth = valueOrDefault(dataset.borderWidth, 1);
-    const nodeWidth = valueOrDefault(dataset.nodeWidth, 10);
+    const nodeWidth = valueOrDefault(dataset.nodeWidth, 20);
 
     ctx.save();
-    ctx.strokeStyle = dataset.borderColor || 'black';
-    ctx.lineWidth = borderWidth;
 
     for (const node of nodes.values()) {
+      ctx.beginPath();
       ctx.fillStyle = node.color;
       const x = xScale.getPixelForValue(node.x);
       const y = yScale.getPixelForValue(node.y);
 
       const max = Math[size](node.in || node.out, node.out || node.in);
       const height = Math.abs(yScale.getPixelForValue(node.y + max) - y);
-      if (borderWidth) {
-        ctx.strokeRect(x, y, nodeWidth, height);
-      }
-      ctx.fillRect(x, y, nodeWidth, height);
+      ctx.roundRect(x, y, nodeWidth, height, [4]);
+      ctx.fill();
     }
     ctx.restore();
   }
