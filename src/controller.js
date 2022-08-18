@@ -229,14 +229,13 @@ export default class SankeyController extends DatasetController {
    */
   _drawLabel(label, y, height, ctx, textX) {
     const me = this;
-    const font = {...toFont(me.options.font, me.chart.options.font), size: 10};
+    const font = toFont(me.options.font, me.chart.options.font);
     const lines = isNullOrUndef(label) ? [] : toTextLines(label);
     const linesLength = lines.length;
-    const middle = y + 0;
     const textHeight = font.lineHeight;
     const padding = valueOrDefault(me.options.padding, textHeight / 2);
 
-    ctx.font = font.string;
+    ctx.font = '10px Open Sans';
 
     if (linesLength > 1) {
       const top = y + textHeight + padding;
@@ -386,9 +385,9 @@ SankeyController.overrides = {
   },
   layout: {
     padding: {
-      top: 3,
-      left: 3,
-      right: 13,
+      top: 0,
+      left: 0,
+      right: 100,
       bottom: 3,
     },
   },
