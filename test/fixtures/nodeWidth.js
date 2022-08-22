@@ -18,7 +18,7 @@ module.exports = {
     options: {
       layout: {
         padding: {
-          right: 53
+          right: 70
         }
       }
     }
