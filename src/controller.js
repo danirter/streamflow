@@ -387,7 +387,7 @@ SankeyController.overrides = {
     padding: {
       top: 0,
       left: 0,
-      right: 100,
+      right: 120,
       bottom: 3,
     },
   },
