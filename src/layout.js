@@ -29,15 +29,6 @@ export function calculateX(nodes, data) {
       x++;
     }
   }
-  [...nodes.keys()]
-    .filter(key => !from.has(key))
-    .forEach(key => {
-      const node = nodes.get(key);
-      // Only move the node to right edge, if it's column is not defined
-      if (!node.column) {
-        node.x = x;
-      }
-    });
 
   return x;
 }
