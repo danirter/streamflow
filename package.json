@@ -65,8 +65,5 @@
     "rollup-plugin-istanbul": "^3.0.0",
     "rollup-plugin-terser": "^7.0.2",
     "typescript": "^4.5.5"
-  },
-  "peerDependencies": {
-    "chart.js": "^3.3.0"
   }
 }
