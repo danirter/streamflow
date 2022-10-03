@@ -1,6 +1,6 @@
 {
   "name": "fds-sankey",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Chart.js module for creating sankey diagrams",
   "main": "dist/fds-sankey.js",
   "module": "dist/fds-sankey.esm.js",

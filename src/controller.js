@@ -7,7 +7,7 @@ import {layout} from './layout';
  * @param {Array<SankeyDataPoint>} data Array of raw data elements
  * @return {Map<string, SankeyNode>}
  */
- export function buildNodesFromRawData(data) {
+export function buildNodesFromRawData(data) {
   const nodes = new Map();
   for (let i = 0; i < data.length; i++) {
     const {from, to, flow} = data[i];
@@ -200,7 +200,6 @@ export default class SankeyController extends DatasetController {
     const {xScale, yScale} = me._cachedMeta;
 
     ctx.save();
-    const chartArea = me.chart.chartArea;
     for (const node of nodes.values()) {
       const x = xScale.getPixelForValue(node.x);
       const y = yScale.getPixelForValue(node.y);
@@ -212,7 +211,7 @@ export default class SankeyController extends DatasetController {
       ctx.fillStyle = node.color || 'black';
       ctx.textBaseline = 'middle';
       ctx.textAlign = 'left';
-      
+
       textX += nodeWidth + borderWidth + 4;
       this._drawLabel(label, y, height, ctx, textX);
     }
@@ -309,7 +308,7 @@ SankeyController.defaults = {
       properties: ['x', 'y', 'x2', 'y2', 'height']
     },
     progress: {
-      easing: 'linear',
+      easing: 'ease',
       duration: (ctx) => ctx.type === 'data' ? (ctx.parsed._custom.x - ctx.parsed.x) * 200 : undefined,
       delay: (ctx) => ctx.type === 'data' ? ctx.parsed.x * 500 + ctx.dataIndex * 20 : undefined,
     },
@@ -387,7 +386,7 @@ SankeyController.overrides = {
     padding: {
       top: 0,
       left: 0,
-      right: 120,
+      right: 150,
       bottom: 3,
     },
   },

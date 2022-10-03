@@ -22,37 +22,36 @@ const controlPoints = (x, y, x2, y2) => x < x2
   };
 
 /**
- *
- * @param {ControlPoint} p1
- * @param {ControlPoint} p2
- * @param {number} t
- * @return {ControlPoint}
- */
+*
+* @param {ControlPoint} p1
+* @param {ControlPoint} p2
+* @param {number} t
+* @return {ControlPoint}
+*/
 const pointInLine = (p1, p2, t) => ({x: p1.x + t * (p2.x - p1.x), y: p1.y + t * (p2.y - p1.y)});
 
 /**
- * @param {CanvasRenderingContext2D} ctx
- * @param {Flow} flow
- */
+* @param {CanvasRenderingContext2D} ctx
+* @param {Flow} flow
+*/
 function setStyle(ctx, {x, x2, options}) {
   let fill;
 
   if (options.colorMode === 'from') {
-    fill = color(options.colorFrom).alpha(0.5).rgbString();
+    fill = color(options.colorFrom).alpha(0.3).rgbString();
   } else if (options.colorMode === 'to') {
-    fill = color(options.colorTo).alpha(0.5).rgbString();
+    fill = color(options.colorTo).alpha(0.3).rgbString();
   } else {
     fill = ctx.createLinearGradient(x, 0, x2, 0);
-    fill.addColorStop(0, color(options.colorFrom).alpha(0.5).rgbString());
-    fill.addColorStop(1, color(options.colorTo).alpha(0.5).rgbString());
+    fill.addColorStop(0, color(options.colorFrom).alpha(0.3).rgbString());
+    fill.addColorStop(1, color(options.colorTo).alpha(0.3).rgbString());
   }
 
   ctx.fillStyle = fill;
-  ctx.strokeStyle = fill;
-  ctx.lineWidth = 0.5;
+  ctx.strokeStyle = 'rgba(1, 1, 1, 0)';
 }
 
-export default class Flow extends Element {
+class Flow extends Element {
 
   /**
    * @param {FlowConfig} cfg
@@ -79,6 +78,7 @@ export default class Flow extends Element {
     const me = this;
     const {x, x2, y, y2, height, progress} = me;
     const {cp1, cp2} = controlPoints(x, y, x2, y2);
+    const extend = 4;
 
     if (progress === 0) {
       return;
@@ -92,12 +92,14 @@ export default class Flow extends Element {
 
     setStyle(ctx, me);
 
+    ctx.globalCompositeOperation = 'destination-over';
+
     ctx.beginPath();
-    ctx.moveTo(x, y);
-    ctx.bezierCurveTo(cp1.x, cp1.y, cp2.x, cp2.y, x2, y2);
-    ctx.lineTo(x2, y2 + height);
-    ctx.bezierCurveTo(cp2.x, cp2.y + height, cp1.x, cp1.y + height, x, y + height);
-    ctx.lineTo(x, y);
+    ctx.moveTo(x - extend, y);
+    ctx.bezierCurveTo(cp1.x, cp1.y, cp2.x, cp2.y, x2 + extend, y2);
+    ctx.lineTo(x2 + extend, y2 + height);
+    ctx.bezierCurveTo(cp2.x, cp2.y + height, cp1.x, cp1.y + height, x - extend, y + height);
+    ctx.lineTo(x - extend, y);
     ctx.stroke();
     ctx.closePath();
 
