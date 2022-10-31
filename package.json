@@ -1,6 +1,6 @@
 {
   "name": "fds-sankey",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Chart.js module for creating sankey diagrams",
   "main": "dist/fds-sankey.js",
   "module": "dist/fds-sankey.esm.js",
@@ -36,7 +36,7 @@
     "@rollup/plugin-node-resolve": "^13.0.0",
     "@typescript-eslint/eslint-plugin": "^5.10.2",
     "@typescript-eslint/parser": "^5.10.2",
-    "chart.js": "^3.3.0",
+    "chart.js": "^3.6.0",
     "chartjs-adapter-date-fns": "^2.0.0",
     "chartjs-test-utils": "^0.4.0",
     "concurrently": "^7.0.0",
