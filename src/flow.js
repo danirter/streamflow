@@ -51,7 +51,7 @@ function setStyle(ctx, {x, x2, options}) {
   ctx.strokeStyle = 'rgba(1, 1, 1, 0)';
 }
 
-class Flow extends Element {
+export default class Flow extends Element {
 
   /**
    * @param {FlowConfig} cfg
