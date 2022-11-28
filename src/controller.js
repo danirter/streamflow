@@ -242,7 +242,8 @@ export default class SankeyController extends DatasetController {
         ctx.fillText(lines[i], textX, top + (i * textHeight));
       }
     } else {
-      ctx.fillText(label, textX, y + textHeight);
+      const labelY = Math.min(y + textHeight, y + (height / 2) + 1);
+      ctx.fillText(label, textX, labelY);
     }
   }
 
